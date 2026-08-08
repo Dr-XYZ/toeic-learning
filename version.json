@@ -1,7 +1,7 @@
 {
-  "version": "1.5.9",
+  "version": "1.6.0",
   "date": "2026-08-08",
   "changes": [
-    "Fix unclickable UI freeze by ensuring settings modal overlay can always be dismissed by close button or backdrop click"
+    "Fix critical JavaScript syntax error in main.js to restore full app clickability and interactive event bindings"
   ]
 }

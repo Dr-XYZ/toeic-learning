@@ -607,6 +607,7 @@ if (btnClearApiKey) {
         }
         btnClearApiKey.classList.add('hidden');
     };
+}
 if (keyModal) {
     keyModal.addEventListener('click', (e) => {
         if (e.target === keyModal) keyModal.classList.remove('active');
