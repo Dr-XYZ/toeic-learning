@@ -186,7 +186,7 @@ AI 生成文章後自動跳到「學習」頁面：
 ## 技術架構
 
 - **純前端單檔架構**（Single HTML File）— 零後端、零依賴
-- **Google Gemini 2.5 Flash** — 文字生成
+- **Google Gemini 3.6 Flash** — 文字與語音生成
 - **Google Gemini TTS** — AI 語音合成
 - **IndexedDB** — 本地資料持久化
 - **Google Drive appDataFolder** — 雲端備份

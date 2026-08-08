@@ -1,7 +1,7 @@
 {
-  "version": "1.4.1",
-  "date": "2026-05-25",
+  "version": "1.4.2",
+  "date": "2026-08-08",
   "changes": [
-    "Restore gemini to fash 2.5"
+    "Upgrade Gemini API to Gemini 3 series (gemini-3.6-flash, gemini-3.1-flash-tts-preview, gemini-3.1-flash-live-preview)"
   ]
 }
