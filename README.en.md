@@ -2,6 +2,8 @@
 
 English | [中文](./README.md)
 
+> ℹ️ **Project Disclaimer**: This repository is a modified personal edition derived from the original [TOEIC AI Tutor by Bruce Yang (brucefay110/toeic-learning)](https://github.com/brucefay110/toeic-learning) under the **PolyForm Noncommercial 1.0.0** license (upgraded cloud backup mechanism to real-time Cloudflare Workers & KV auto-sync).
+
 > Zero install, zero monthly fee, AI-powered TOEIC learning. Open your browser and start practicing anytime, anywhere.
 
 ## Demo
@@ -14,7 +16,7 @@ English | [中文](./README.md)
 
 ## 👉 Start Now
 
-**[https://brucefay1115.github.io/toeic-learning](https://brucefay1115.github.io/toeic-learning)**
+**[https://Dr-XYZ.github.io/toeic-learning](https://Dr-XYZ.github.io/toeic-learning)**
 
 No download, no installation. Just open the link and start learning.
 
@@ -83,9 +85,9 @@ This is the key feature that helps you truly remember words:
 
 Long-press **any word** in a passage to see part of speech, IPA, Chinese meaning, and example usage. If a word is missing, tap once for **AI instant analysis**.
 
-### ☁️ Google cloud backup
+### ☁️ Cloudflare Cloud Auto-Sync
 
-Sign in with Google to back up your learning records and vocabulary book to Google Drive. Supports **Back Up Now / Restore from Cloud / Sign Out** (API key excluded).
+Configure your personal Cloudflare Worker URL to automatically auto-sync learning records and vocabulary to Cloudflare KV in real-time, achieving seamless cross-device synchronization and offline backup (API key excluded).
 
 ---
 
@@ -103,7 +105,7 @@ This project uses the free tier of [Google Gemini API](https://aistudio.google.c
 
 ## Quick Start
 
-1. Open **[https://brucefay1115.github.io/toeic-learning](https://brucefay1115.github.io/toeic-learning)**
+1. Open **[https://Dr-XYZ.github.io/toeic-learning](https://Dr-XYZ.github.io/toeic-learning)**
 2. Add it to your home screen for a full-screen app experience
 3. Configure your free Gemini API key
 4. Start learning
@@ -164,7 +166,7 @@ After signing in on the settings page, you can use **Back Up Now / Restore from 
 | Key Vocabulary Cards | POS, IPA, meaning, and examples included |
 | Phrase Analysis | Extracts and explains useful phrases from passages |
 | Learning Records | Automatically saves generated content for review |
-| Cloud Backup | Manual Google Drive backup/restore across devices |
+| Cloud Auto-Sync | Real-time Cloudflare KV auto-sync across devices |
 | Offline Storage | IndexedDB local storage for history access |
 | Mobile-first | Designed for phone use with home-screen app mode |
 
@@ -185,14 +187,14 @@ After signing in on the settings page, you can use **Back Up Now / Restore from 
 - **Google Gemini 3.6 Flash** - text and speech generation
 - **Google Gemini TTS** - AI speech synthesis
 - **IndexedDB** - local persistent storage
-- **Google Drive appDataFolder** - cloud backup
+- **Cloudflare Worker & KV** - real-time cloud auto-sync
 - **SRS algorithm** - spaced repetition scheduling
 
 ---
 
 ## Support This Project
 
-If this tool helps your learning, feel free to buy me a coffee so I can keep building more features.
+If this tool helps your learning, feel free to buy original author a coffee to support continuous development.
 
 [![Facebook](https://img.shields.io/badge/Facebook-Bruce%20Yang-1877F2?logo=facebook&logoColor=white)](https://www.facebook.com/bruce.yang.94)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Chun--Hsiang%20Yang-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/chun-hsiang-yang-b17238165)
@@ -202,8 +204,8 @@ If this tool helps your learning, feel free to buy me a coffee so I can keep bui
 
 ## Notes for Developers
 
-- This site uses **Google Analytics (GA)** to collect anonymous traffic data. If you fork or redeploy this project, remember to **replace or remove** the GA tracking code in `index.html`.
-- This project uses **Google Drive API** for sign-in and cloud backup. If you deploy your own version, create your own GCP project in [Google Cloud Console](https://console.cloud.google.com/) and replace the OAuth Client ID.
+- This project uses **Cloudflare Workers & KV** for real-time cloud data storage and auto-sync. No Google OAuth or GA tracking code required.
+- Backend Worker script is located in `/worker`. Refer to `worker/wrangler.toml` for deployment details.
 
 ---
 
@@ -211,7 +213,9 @@ If this tool helps your learning, feel free to buy me a coffee so I can keep bui
 
 PolyForm Noncommercial 1.0.0
 
-You may freely use, modify, and share this project for non-commercial purposes. Any commercial use (including but not limited to paid services, commercial product integration, or for-profit internal enterprise usage) requires prior written authorization from Bruce Yang.
+This modified edition is derived from [TOEIC AI Tutor](https://github.com/brucefay110/toeic-learning) by Bruce Yang under the **PolyForm Noncommercial 1.0.0** license.
+
+You may freely use, modify, and share this project for non-commercial purposes. Any commercial use requires prior written authorization from original author Bruce Yang.
 
 ---
 

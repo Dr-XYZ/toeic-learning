@@ -4,7 +4,7 @@ import { state, VOICE_OPTIONS, VOICE_NAMES, SPEAKING_ACCENT_OPTIONS, ICONS } fro
 import { speakText } from './utils.js';
 import { DB } from './db.js';
 import { fetchGeminiText, fetchGeminiTTS, fetchExamQuestions, fetchExamWrongAnswerExplanations } from './apiGemini.js';
-import { DriveSync } from './driveSync.js';
+import { CloudflareSync } from './cloudflareSync.js';
 import { setupAudio } from './audioPlayer.js';
 import { renderContent, toggleEnglish, toggleTranslation, updateToggleButtons } from './render.js';
 import { closeModal, renderVocabTab, setSrsTrigger, setVocabSubtab, handleLookupSearch } from './vocab.js';
@@ -40,12 +40,12 @@ setHistoryDeps({
     openSpeakingRecord: openSpeakingRecordFromHistory,
     onHistoryMutated: handleHistoryMutated
 });
-DriveSync.setCallbacks({ renderHistory, loadLastSession, renderVocabTab });
+CloudflareSync.setCallbacks({ renderHistory, loadLastSession, renderVocabTab });
 
 /* ── Expose minimal globals needed by dynamic innerHTML onclick ── */
 window.speakText = speakText;
 window.finishSrsReview = finishSrsReview;
-window.DriveSync = DriveSync;
+window.CloudflareSync = CloudflareSync;
 document.addEventListener('player-loading-changed', updatePlayerBarVisibility);
 
 const emptyStateEl = document.getElementById('emptyState');
@@ -294,22 +294,28 @@ document.getElementById('btnSettings').onclick = () => {
     if (btnClearApiKey) btnClearApiKey.classList.toggle('hidden', !state.apiKey);
     document.getElementById('btnCloseKeyModal').style.display = state.apiKey ? 'flex' : 'none';
     if (localeSelect) localeSelect.value = getLocale();
-    DriveSync.updateUI();
+    CloudflareSync.updateUI();
     keyModal.classList.add('active');
 };
 
-async function saveApiKey() {
+async function saveSettingsModal() {
     const v = document.getElementById('apiKeyInput').value.trim();
     if (!v) {
         state.apiKey = '';
         await DB.setSetting('gemini_api_key', null);
-        document.getElementById('btnCloseKeyModal').style.display = 'none';
-        keyModal.classList.remove('active');
-        return;
+    } else {
+        state.apiKey = v;
+        await DB.setSetting('gemini_api_key', v);
     }
-    state.apiKey = v;
-    await DB.setSetting('gemini_api_key', v);
+
+    const cfUrl = (document.getElementById('cfWorkerUrlInput')?.value || '').trim();
+    const cfToken = (document.getElementById('cfAuthTokenInput')?.value || '').trim();
+    await CloudflareSync.setConfig(cfUrl, cfToken);
+
     keyModal.classList.remove('active');
+    if (CloudflareSync.isConfigured({ url: cfUrl })) {
+        CloudflareSync.pushToCloud();
+    }
 }
 
 function setAppVersionText(text) {
@@ -582,7 +588,7 @@ if (btnAnnouncement && announcementModal) {
 if (btnCloseAnnouncementModal && announcementModal) {
     btnCloseAnnouncementModal.onclick = () => announcementModal.classList.remove('active');
 }
-document.getElementById('btnSaveApiKey').onclick = async () => saveApiKey();
+document.getElementById('btnSaveApiKey').onclick = async () => saveSettingsModal();
 const apiKeyInput = document.getElementById('apiKeyInput');
 const btnClearApiKey = document.getElementById('btnClearApiKey');
 if (apiKeyInput) {
@@ -611,10 +617,10 @@ if (localeSelect) {
         }
     };
 }
-document.getElementById('btnCloudLogin').onclick = () => DriveSync.login();
-document.getElementById('btnBackupNow').onclick = () => DriveSync.backupNow();
-document.getElementById('btnRestore').onclick = () => DriveSync.restore();
-document.getElementById('btnCloudLogout').onclick = () => DriveSync.logout();
+const btnCfManualBackup = document.getElementById('btnCfManualBackup');
+const btnCfManualRestore = document.getElementById('btnCfManualRestore');
+if (btnCfManualBackup) btnCfManualBackup.onclick = () => CloudflareSync.manualBackup();
+if (btnCfManualRestore) btnCfManualRestore.onclick = () => CloudflareSync.manualRestore();
 document.querySelector('#srsOverlay .srs-close-btn').onclick = () => closeSrsReview();
 
 function appendSpeakingLog(role, text) {
@@ -1018,12 +1024,7 @@ GENERATE_BTN.onclick = async () => {
         viewShowSpeakingConfig(setLearnRuntimeMode, switchTab);
         viewShowExamConfig(setLearnRuntimeMode, switchTab);
 
-        DriveSync.init();
-        const cloudEnabled = await DB.getSetting('cloud_sync_enabled');
-        if (cloudEnabled) {
-            await DriveSync.silentLogin();
-            DriveSync.updateUI();
-        }
+        await CloudflareSync.initCloudSync();
         initPostLocalePrompts();
     } catch (e) { logError('Init failed', e); keyModal.classList.add('active'); }
     finally {

@@ -1,7 +1,7 @@
 {
-  "version": "1.4.2",
+  "version": "1.5.0",
   "date": "2026-08-08",
   "changes": [
-    "Upgrade Gemini API to Gemini 3 series (gemini-3.6-flash, gemini-3.1-flash-tts-preview, gemini-3.1-flash-live-preview)"
+    "Migrate cloud storage from Google Drive OAuth to Cloudflare Workers & KV real-time auto-sync"
   ]
 }

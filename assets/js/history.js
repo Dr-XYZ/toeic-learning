@@ -7,6 +7,7 @@ import { renderContent } from './render.js';
 import { setupAudio, setPlayerLoading } from './audioPlayer.js';
 import { t } from './i18n.js';
 import { createId } from './id.js';
+import { CloudflareSync } from './cloudflareSync.js';
 
 let _deps = { switchTab: null, openArticleRecord: null, openExamRecord: null, openSpeakingRecord: null, onHistoryMutated: null };
 
@@ -45,6 +46,7 @@ export async function saveToHistory(data, audioBase64, voiceName, topic) {
     };
     try {
         await DB.addHistory(entry);
+        CloudflareSync.autoSync();
         if (isHistoryTabVisible()) renderHistory();
         return entry;
     }
@@ -60,6 +62,7 @@ export async function savePracticeRecord(entry) {
         ...entry
     };
     await DB.addHistory(record);
+    CloudflareSync.autoSync();
     if (isHistoryTabVisible()) renderHistory();
 }
 
@@ -157,6 +160,7 @@ export function loadSession(item) {
 
 async function deleteHistoryItem(item) {
     await DB.deleteHistory(item.id);
+    CloudflareSync.autoSync();
     if (_deps.onHistoryMutated) _deps.onHistoryMutated({ action: 'delete', item });
     renderHistory();
 }
@@ -164,6 +168,7 @@ async function deleteHistoryItem(item) {
 export async function clearHistory() {
     if (confirm(t('historyClearConfirm'))) {
         await DB.clearHistory();
+        CloudflareSync.autoSync();
         if (_deps.onHistoryMutated) _deps.onHistoryMutated({ action: 'clear' });
         renderHistory();
     }

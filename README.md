@@ -2,6 +2,8 @@
 
 [English](./README.en.md) | 中文
 
+> ℹ️ **專案修改申明**：本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor (brucefay110/toeic-learning)](https://github.com/brucefay110/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途之客製化修改（將備份機制升級為 Cloudflare Workers & KV 即時自動同步）。
+
 > 零安裝、零月費、AI 驅動的多益學習神器。打開瀏覽器就能練，忙碌的你也能高效備考。
 
 ## Demo
@@ -14,7 +16,7 @@
 
 ## 👉 立即使用
 
-**[https://brucefay1115.github.io/toeic-learning](https://brucefay1115.github.io/toeic-learning)**
+**[https://Dr-XYZ.github.io/toeic-learning](https://Dr-XYZ.github.io/toeic-learning)**
 
 不用下載、不用安裝，點開連結就能開始學習！
 
@@ -85,9 +87,9 @@
 
 文章中**任何單字長按即可查詢**，顯示詞性、音標、中文釋義與例句。找不到的字？一鍵呼叫 **AI 即時解析**。
 
-### ☁️ Google 雲端備份
+### ☁️ Cloudflare 雲端自動同步
 
-登入 Google 帳號即可將學習紀錄、單字本備份到 Google Drive，支援**立即備份 / 從雲端還原 / 登出**（不包含 API Key）。
+設定個人 Cloudflare Worker 網址後，系統將會**自動即時同步**學習紀錄與單字庫至 Cloudflare KV，輕鬆實現跨裝置零延遲同步與離線自動備份（不包含 API Key）。
 
 ---
 
@@ -105,7 +107,7 @@
 
 ## 快速開始
 
-1. 打開 **[https://brucefay1115.github.io/toeic-learning](https://brucefay1115.github.io/toeic-learning)**
+1. 打開 **[https://Dr-XYZ.github.io/toeic-learning](https://Dr-XYZ.github.io/toeic-learning)**
 2. 將網頁加入手機主畫面，享受全螢幕 App 體驗
 3. 設定免費的 Gemini API Key
 4. 開始學習！
@@ -167,7 +169,7 @@ AI 生成文章後自動跳到「學習」頁面：
 | 核心單字卡   | 詞性、音標、釋義、例句一應俱全              |
 | 片語解析    | 提取文章中的常用片語並附解釋               |
 | 學習紀錄    | 自動儲存每次生成的內容，隨時回顧             |
-| 雲端備份    | Google Drive 手動備份/還原，跨裝置延續進度 |
+| 雲端自動同步 | Cloudflare KV 即時自動同步，跨裝置延續進度 |
 | 離線儲存    | IndexedDB 本地儲存，無網路也能回顧歷史內容   |
 | 行動優先    | 專為手機設計，支援加入主畫面全螢幕使用          |
 
@@ -189,14 +191,14 @@ AI 生成文章後自動跳到「學習」頁面：
 - **Google Gemini 3.6 Flash** — 文字與語音生成
 - **Google Gemini TTS** — AI 語音合成
 - **IndexedDB** — 本地資料持久化
-- **Google Drive appDataFolder** — 雲端備份
+- **Cloudflare Worker & KV** — 雲端即時自動同步
 - **SRS 演算法** — 間隔重複記憶排程
 
 ---
 
 ## 支持這個專案
 
-如果覺得這個工具對你有幫助，歡迎請我喝杯咖啡，支持我持續開發更多功能！
+如果覺得這個工具對你有幫助，歡迎請原作者喝杯咖啡，支持持續開發更多功能！
 
 [![Facebook](https://img.shields.io/badge/Facebook-Bruce%20Yang-1877F2?logo=facebook&logoColor=white)](https://www.facebook.com/bruce.yang.94)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Chun--Hsiang%20Yang-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/chun-hsiang-yang-b17238165)
@@ -206,16 +208,18 @@ AI 生成文章後自動跳到「學習」頁面：
 
 ## 給開發者的提醒
 
-- 本網站使用 **Google Analytics (GA)** 蒐集匿名流量數據，以協助了解使用者行為。若你 fork 或重新部署本專案，請記得**替換或移除** `index.html` 中的 GA 追蹤碼。
-- 本專案使用 **Google Drive API** 進行登入與雲端備份功能，若你要自行部署，請記得在 [Google Cloud Console](https://console.cloud.google.com/) 建立自己的 GCP 專案並替換 OAuth Client ID。
+- 本專案已改用 **Cloudflare Workers & KV** 進行個人雲端資料儲存與自動同步，完全無需 Google OAuth (Drive API) 與 GA 追蹤碼。
+- 後端 Worker 程式碼位於 `/worker` 目錄，部署請參考 `worker/wrangler.toml` 配置說明。
 
 ---
 
-## 授權
+## 授權條款 (License)
 
 PolyForm Noncommercial 1.0.0
 
-你可以自由使用、修改與分享本專案於非商業用途；任何商業化使用（包含但不限於付費服務、商業產品整合、企業內部營利用途）需先取得作者 Bruce Yang 的書面授權。
+本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor](https://github.com/brucefay110/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途修改與使用。
+
+您可以自由使用、修改與分享本專案於非商業用途；任何商業化使用（包含但不限於付費服務、商業產品整合、企業內部營利用途）需先取得原作者 Bruce Yang 的書面授權。
 
 ---
 

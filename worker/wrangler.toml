@@ -1,0 +1,11 @@
+name = "toeic-tutor-storage"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# Cloudflare KV Namespace binding
+[[kv_namespaces]]
+binding = "TOEIC_DATA_KV"
+id = "<YOUR_KV_NAMESPACE_ID>"
+
+# Environment secrets:
+# Set AUTH_TOKEN using: npx wrangler secret put AUTH_TOKEN

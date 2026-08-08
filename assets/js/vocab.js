@@ -5,6 +5,7 @@ import { DB } from './db.js';
 import { fetchWordDetails, fetchPhraseDetails, validateWordWithLanguageTool } from './apiGemini.js';
 import { speakText } from './utils.js';
 import { t } from './i18n.js';
+import { CloudflareSync } from './cloudflareSync.js';
 
 let _startSrsReview = null;
 let _vocabSubtab = 'notebook';
@@ -242,11 +243,13 @@ async function backfillSavedWordExample(word, vocabItem = {}) {
 export async function saveWordToNotebook(word, vocabItem) {
     await DB.addSavedWord(buildSavedWordPayload(word, vocabItem));
     syncVocabCardBookmark(word, true);
+    CloudflareSync.autoSync();
 }
 
 export async function removeWordFromNotebook(word) {
     await DB.deleteSavedWord(normalizeWordId(word));
     syncVocabCardBookmark(word, false);
+    CloudflareSync.autoSync();
 }
 
 export async function toggleWordSaved(word, vocabItem) {

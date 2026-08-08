@@ -55,17 +55,7 @@
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
-    </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3KMB363K29"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-3KMB363K29');
-    </script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
+
       (function bootstrapAppAssets() {
         document.documentElement.classList.add('app-booting');
         var cssReady = false;
@@ -424,30 +414,25 @@
             <div class="cloud-section">
                 <h4>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-                    <span data-i18n="cloudBackupTitle">雲端備份 Cloud Backup</span>
+                    <span data-i18n="cloudBackupTitle">Cloudflare 雲端自動同步</span>
+                    <span id="cfSyncBadge" class="cf-sync-badge sync-state-unconfigured">未設定</span>
                 </h4>
-                <p style="font-size:12px; color:#999; margin: 0 0 10px;" data-i18n="cloudBackupNote">雲端僅同步學習紀錄與單字，不包含 API Key。</p>
-                <div id="cloudAuthArea">
-                    <button class="cloud-login-btn" id="btnCloudLogin">
-                        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                        <span data-i18n="cloudLoginBtn">使用 Google 帳號登入</span>
-                    </button>
+                <p style="font-size:12px; color:#999; margin: 0 0 10px;" data-i18n="cloudBackupNote">學習紀錄與單字庫會自動即時同步至 Cloudflare KV 雲端。</p>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; color: var(--text-sub); display: block; margin-bottom: 4px;" data-i18n="cfWorkerUrlLabel">Cloudflare Worker 網址</label>
+                    <input type="text" id="cfWorkerUrlInput" class="topic-input" placeholder="https://toeic-tutor-storage.yourname.workers.dev" style="font-size: 13px; margin-bottom: 8px;">
+
+                    <label style="font-size: 12px; color: var(--text-sub); display: block; margin-bottom: 4px;" data-i18n="cfAuthTokenLabel">個人 Token (可選防護)</label>
+                    <input type="password" id="cfAuthTokenInput" class="topic-input" placeholder="Enter your secret token..." style="font-size: 13px;">
                 </div>
-                <div id="cloudUserArea" class="hidden">
-                    <div class="cloud-user-info">
-                        <div class="cloud-user-avatar" id="cloudAvatar">G</div>
-                        <div class="cloud-user-detail">
-                            <div class="cloud-user-name" id="cloudUserName">User</div>
-                            <div class="cloud-user-email" id="cloudUserEmail">user@gmail.com</div>
-                        </div>
-                    </div>
-                    <div class="cloud-actions">
-                        <button class="cloud-action-btn primary" id="btnBackupNow" data-i18n="cloudBackupNowBtn">立即備份</button>
-                        <button class="cloud-action-btn" id="btnRestore" data-i18n="cloudRestoreBtn">從雲端還原</button>
-                        <button class="cloud-action-btn danger" id="btnCloudLogout" data-i18n="cloudLogoutBtn">登出</button>
-                    </div>
-                    <div class="cloud-last-sync" id="cloudLastSync"></div>
+
+                <div class="cloud-actions" style="margin-top: 10px;">
+                    <button class="cloud-action-btn primary" id="btnCfManualBackup" data-i18n="cloudBackupNowBtn">手動同步</button>
+                    <button class="cloud-action-btn" id="btnCfManualRestore" data-i18n="cloudRestoreBtn">拉取雲端資料</button>
                 </div>
+                <div class="cloud-last-sync" id="cfLastSyncTime" style="margin-top: 8px; font-size: 12px; color: #8e8e93;"></div>
+                <div id="cfSyncStatusText" style="font-size: 11px; color: #666; margin-top: 4px;"></div>
             </div>
             </section>
 

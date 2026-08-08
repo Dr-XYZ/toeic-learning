@@ -4,6 +4,7 @@ import { ICONS, SRS_INTERVALS, SRS_MAX_WORDS, getNextReviewTime } from './state.
 import { DB } from './db.js';
 import { shuffleArray, speakText, speakTextPromise } from './utils.js';
 import { t } from './i18n.js';
+import { CloudflareSync } from './cloudflareSync.js';
 
 let _onFinish = null;
 export function setOnFinish(fn) { _onFinish = fn; }
@@ -159,6 +160,7 @@ async function showSrsResults() {
         await DB.updateWordSRS(word.id, newLevel, newNext);
         wordResults.push({ word, oldLevel: word.level, newLevel, cc, nextDate: new Date(newNext).toLocaleDateString() });
     }
+    CloudflareSync.autoSync();
     srsState.active = false;
     const total = srsState.words.length * 3;
     qArea.innerHTML = `<div class="srs-result-score">${totalCorrect}/${total}</div><div class="srs-result-label">${t('srsCorrectCount')}</div>`;
