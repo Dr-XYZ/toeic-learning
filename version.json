@@ -1,7 +1,7 @@
 {
-  "version": "1.5.2",
+  "version": "1.5.3",
   "date": "2026-08-08",
   "changes": [
-    "Upgrade Service Worker PWA cache handling and skipWaiting for iOS WebKit standalone mode"
+    "Default to built-in Cloudflare Worker URL and require Invite Code (Access Token) to activate cloud sync"
   ]
 }

@@ -7,13 +7,16 @@ let _callbacks = { renderHistory: null, loadLastSession: null, renderVocabTab: n
 let _debounceTimer = null;
 let _isSyncing = false;
 
+export const DEFAULT_WORKER_URL = 'https://toeic-tutor-storage.an-xyz-tw.workers.dev';
+
 export const CloudflareSync = {
     setCallbacks(cbs) {
         _callbacks = { ..._callbacks, ...cbs };
     },
 
     async getConfig() {
-        const url = (await DB.getSetting('cf_worker_url')) || '';
+        const savedUrl = await DB.getSetting('cf_worker_url');
+        const url = (savedUrl != null && savedUrl !== '') ? savedUrl : DEFAULT_WORKER_URL;
         const token = (await DB.getSetting('cf_auth_token')) || '';
         return { url: url.trim().replace(/\/+$/, ''), token: token.trim() };
     },
@@ -21,11 +24,11 @@ export const CloudflareSync = {
     async setConfig(url, token) {
         await DB.setSetting('cf_worker_url', (url || '').trim());
         await DB.setSetting('cf_auth_token', (token || '').trim());
-        this.updateUI();
+        await this.updateUI();
     },
 
     isConfigured(cfg) {
-        return !!(cfg && cfg.url);
+        return !!(cfg && cfg.url && cfg.token);
     },
 
     async getHeaders(cfg) {

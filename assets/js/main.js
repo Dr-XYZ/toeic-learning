@@ -313,7 +313,8 @@ async function saveSettingsModal() {
     await CloudflareSync.setConfig(cfUrl, cfToken);
 
     keyModal.classList.remove('active');
-    if (CloudflareSync.isConfigured({ url: cfUrl })) {
+    const cfCfg = await CloudflareSync.getConfig();
+    if (CloudflareSync.isConfigured(cfCfg)) {
         CloudflareSync.pushToCloud();
     }
 }
