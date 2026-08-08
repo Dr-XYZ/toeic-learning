@@ -1,7 +1,7 @@
 {
-  "version": "1.5.7",
+  "version": "1.5.8",
   "date": "2026-08-08",
   "changes": [
-    "Security hardening: Replace explicit invite secret string in UI placeholders with generic INVITE_CODE placeholders"
+    "Fix AI availability checks so users authenticated with Cloud Invite Code do not get prompted for manual API Key"
   ]
 }

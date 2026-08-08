@@ -30,7 +30,7 @@ export default {
     "alertInvalidApiKey": "有効な API Key を入力してください。",
     "confirmClearApiKey": "保存済みの API Key を削除しますか？",
     "alertApiKeyCleared": "API Key を削除しました。",
-    "alertSetApiKeyFirst": "先に API Key を設定してください。",
+    "alertSetApiKeyFirst": "設定(⚙️)でクラウド招待コードまたは API Key を設定してください。",
     "alertSelectTopicFirst": "先にトピックを入力または選択してください。",
     "alertGenerateFailed": "生成に失敗しました: {message}",
     "alertPlaybackFailed": "音声再生に失敗しました: {message}",

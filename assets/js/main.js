@@ -3,7 +3,7 @@
 import { state, VOICE_OPTIONS, VOICE_NAMES, SPEAKING_ACCENT_OPTIONS, ICONS } from './state.js';
 import { speakText } from './utils.js';
 import { DB } from './db.js';
-import { fetchGeminiText, fetchGeminiTTS, fetchExamQuestions, fetchExamWrongAnswerExplanations } from './apiGemini.js';
+import { fetchGeminiText, fetchGeminiTTS, fetchExamQuestions, fetchExamWrongAnswerExplanations, isAiAvailable } from './apiGemini.js';
 import { CloudflareSync } from './cloudflareSync.js';
 import { setupAudio } from './audioPlayer.js';
 import { renderContent, toggleEnglish, toggleTranslation, updateToggleButtons } from './render.js';
@@ -878,7 +878,7 @@ async function handleExplainWrongAnswers() {
 }
 
 EXAM_BTN.onclick = async () => {
-    if (!state.apiKey) return alert(t('alertSetApiKeyFirst'));
+    if (!await isAiAvailable()) return alert(t('alertSetApiKeyFirst'));
     const finishLoading = setButtonLoading(EXAM_BTN, t('loadingGeneratingQuestions'));
     try {
         const examData = await fetchExamQuestions(state.targetScore);
@@ -967,7 +967,7 @@ document.getElementById('btnExamBack').onclick = () => viewShowExamConfig(setLea
 const GENERATE_BTN = document.getElementById('btnGenerate');
 
 GENERATE_BTN.onclick = async () => {
-    if (!state.apiKey) return alert(t('alertSetApiKeyFirst'));
+    if (!await isAiAvailable()) return alert(t('alertSetApiKeyFirst'));
     const finishLoading = setButtonLoading(GENERATE_BTN, t('loadingGenerating'));
     document.getElementById('learningArea').classList.add('hidden');
     document.getElementById('playerBar').classList.add('hidden');

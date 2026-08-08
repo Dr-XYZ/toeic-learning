@@ -30,7 +30,7 @@ export default {
     "alertInvalidApiKey": "請輸入有效的 API Key",
     "confirmClearApiKey": "確定要清除已儲存的 API Key 嗎？",
     "alertApiKeyCleared": "API Key 已清除",
-    "alertSetApiKeyFirst": "請先設定 API Key",
+    "alertSetApiKeyFirst": "請先在設定 (⚙️) 中輸入雲端邀請碼或 API Key！",
     "alertSelectTopicFirst": "請先輸入或選擇主題",
     "alertGenerateFailed": "生成失敗: {message}",
     "alertPlaybackFailed": "播放語音失敗: {message}",

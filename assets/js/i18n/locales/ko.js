@@ -30,7 +30,7 @@ export default {
     "alertInvalidApiKey": "유효한 API Key를 입력해 주세요.",
     "confirmClearApiKey": "저장된 API Key를 삭제할까요?",
     "alertApiKeyCleared": "API Key가 삭제되었습니다.",
-    "alertSetApiKeyFirst": "먼저 API Key를 설정해 주세요.",
+    "alertSetApiKeyFirst": "설정(⚙️)에서 클라우드 초대코드 또는 API Key를 입력해 주세요.",
     "alertSelectTopicFirst": "먼저 주제를 입력하거나 선택해 주세요.",
     "alertGenerateFailed": "생성 실패: {message}",
     "alertPlaybackFailed": "오디오 재생 실패: {message}",

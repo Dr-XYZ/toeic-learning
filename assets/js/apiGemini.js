@@ -18,6 +18,12 @@ function parseJsonCandidateText(rawText) {
     return JSON.parse(cleaned);
 }
 
+export async function isAiAvailable() {
+    if (state.apiKey) return true;
+    const cfConfig = await CloudflareSync.getConfig();
+    return CloudflareSync.isConfigured(cfConfig);
+}
+
 async function callGemini(model, action, payload) {
     if (state.apiKey) {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:${action}?key=${state.apiKey}`, {

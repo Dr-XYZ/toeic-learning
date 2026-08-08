@@ -4,6 +4,7 @@ import { GoogleGenAI, Modality } from 'https://esm.run/@google/genai';
 import { LIVE_AUDIO_MODEL, state, VOICE_NAMES } from './state.js';
 import { t } from './i18n.js';
 import { SPEAKING_LEVELS, getSpeakingLevelByScore } from './speakingLevel.js';
+import { isAiAvailable } from './apiGemini.js';
 
 const INPUT_MIME = 'audio/pcm;rate=16000';
 const MEDIA_RESOLUTION_LOW = 'MEDIA_RESOLUTION_LOW'; // ~66-70 tokens/image
@@ -349,7 +350,7 @@ export async function startSpeakingSession(input, callbacks = {}) {
     const score = typeof input === 'object' && input !== null ? Number(input.score) || 700 : 700;
     const level = typeof input === 'object' && input !== null ? String(input.level || '').trim() : '';
     const accent = typeof input === 'object' && input !== null ? String(input.accent || 'random').trim() : 'random';
-    if (!state.apiKey) throw new Error(t('alertSetApiKeyFirst'));
+    if (!await isAiAvailable()) throw new Error(t('alertSetApiKeyFirst'));
     if (!topic) throw new Error(t('alertSelectTopicFirst'));
     if (liveSession || mediaStream) await stopSpeakingSession();
 

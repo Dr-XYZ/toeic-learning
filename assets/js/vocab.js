@@ -2,7 +2,7 @@
 
 import { state, ICONS, SRS_INTERVALS, SRS_MIN_WORDS, SRS_MAX_WORDS, getNextReviewTime } from './state.js';
 import { DB } from './db.js';
-import { fetchWordDetails, fetchPhraseDetails, validateWordWithLanguageTool } from './apiGemini.js';
+import { fetchWordDetails, fetchPhraseDetails, validateWordWithLanguageTool, isAiAvailable } from './apiGemini.js';
 import { speakText } from './utils.js';
 import { t } from './i18n.js';
 import { CloudflareSync } from './cloudflareSync.js';
@@ -373,7 +373,7 @@ export async function handleLookupSearch() {
         else renderLookupMessage(t('vocabLookupCharsInvalid'));
         return;
     }
-    if (!state.apiKey) {
+    if (!await isAiAvailable()) {
         alert(t('alertSetApiKeyFirst'));
         return;
     }
