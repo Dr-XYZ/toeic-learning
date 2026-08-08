@@ -1,3 +1,5 @@
 .DS_Store
 AUDIT_PRIORITIES.md
 .vite
+.wrangler/
+.dev.vars
