@@ -1,7 +1,7 @@
 {
-  "version": "1.5.3",
+  "version": "1.5.7",
   "date": "2026-08-08",
   "changes": [
-    "Default to built-in Cloudflare Worker URL and require Invite Code (Access Token) to activate cloud sync"
+    "Security hardening: Replace explicit invite secret string in UI placeholders with generic INVITE_CODE placeholders"
   ]
 }

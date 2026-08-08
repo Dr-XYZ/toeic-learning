@@ -21,10 +21,33 @@ function jsonResponse(data, status = 200) {
 
 function verifyAuth(request, env) {
   const secretToken = env.AUTH_TOKEN;
-  if (!secretToken) return true; // If no secret configured, allow access
   const authHeader = request.headers.get('Authorization') || '';
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  return token === secretToken.trim();
+
+  if (!secretToken) {
+    return { ok: true, token: token || 'default' };
+  }
+
+  const secret = secretToken.trim();
+  if (
+    token === secret ||
+    token.startsWith(secret + ':') ||
+    token.startsWith(secret + '#') ||
+    token.startsWith(secret + '-') ||
+    token.startsWith(secret + '_')
+  ) {
+    return { ok: true, token };
+  }
+  return { ok: false, token: '' };
+}
+
+async function getKvKey(token) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(token || 'default');
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return `user_data_${hashHex.slice(0, 16)}`;
 }
 
 export default {
@@ -40,13 +63,18 @@ export default {
     }
 
     if (url.pathname === '/api/data') {
-      if (!verifyAuth(request, env)) {
-        return jsonResponse({ error: 'Unauthorized: Invalid token' }, 401);
+      const auth = verifyAuth(request, env);
+      if (!auth.ok) {
+        return jsonResponse({ error: 'Unauthorized: Invalid token or account key' }, 401);
       }
+      const kvKey = await getKvKey(auth.token);
 
       if (request.method === 'GET') {
         try {
-          const rawData = await env.TOEIC_DATA_KV.get('user_data');
+          let rawData = await env.TOEIC_DATA_KV.get(kvKey);
+          if (!rawData && (auth.token === (env.AUTH_TOKEN || '').trim() || auth.token === 'default')) {
+            rawData = await env.TOEIC_DATA_KV.get('user_data');
+          }
           if (!rawData) {
             return jsonResponse({
               version: 1,
@@ -76,7 +104,7 @@ export default {
             savedWords: Array.isArray(body.savedWords) ? body.savedWords : [],
           };
 
-          await env.TOEIC_DATA_KV.put('user_data', JSON.stringify(payload));
+          await env.TOEIC_DATA_KV.put(kvKey, JSON.stringify(payload));
           return jsonResponse({ success: true, updatedAt: payload.updatedAt });
         } catch (err) {
           return jsonResponse({ error: 'Failed to write data to KV: ' + err.message }, 500);
@@ -84,6 +112,43 @@ export default {
       }
 
       return jsonResponse({ error: 'Method not allowed' }, 405);
+    }
+
+    if (url.pathname === '/api/gemini') {
+      const auth = verifyAuth(request, env);
+      if (!auth.ok) {
+        return jsonResponse({ error: 'Unauthorized: Invalid token' }, 401);
+      }
+      if (request.method !== 'POST') {
+        return jsonResponse({ error: 'Method not allowed' }, 405);
+      }
+
+      const clientApiKey = request.headers.get('X-Gemini-API-Key') || '';
+      const apiKey = (env.GEMINI_API_KEY || clientApiKey).trim();
+
+      if (!apiKey) {
+        return jsonResponse({ error: '伺服器未設定 GEMINI_API_KEY，且未提供 API Key' }, 400);
+      }
+
+      try {
+        const body = await request.json();
+        const model = body.model || 'gemini-flash-latest';
+        const action = body.action || 'generateContent';
+        const payload = body.payload || body;
+
+        const googleUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:${action}?key=${apiKey}`;
+
+        const geminiResp = await fetch(googleUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await geminiResp.json();
+        return jsonResponse(data, geminiResp.status);
+      } catch (err) {
+        return jsonResponse({ error: 'Cloudflare Gemini proxy 錯誤: ' + err.message }, 500);
+      }
     }
 
     return jsonResponse({ error: 'Not found' }, 404);

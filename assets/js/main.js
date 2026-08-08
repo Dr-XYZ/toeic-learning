@@ -288,11 +288,13 @@ async function persistLocaleSelection(locale) {
     await DB.setSetting('app_locale_history', list.slice(0, 30));
 }
 
-document.getElementById('btnSettings').onclick = () => {
+document.getElementById('btnSettings').onclick = async () => {
     document.getElementById('apiKeyInput').value = state.apiKey;
     const btnClearApiKey = document.getElementById('btnClearApiKey');
     if (btnClearApiKey) btnClearApiKey.classList.toggle('hidden', !state.apiKey);
-    document.getElementById('btnCloseKeyModal').style.display = state.apiKey ? 'flex' : 'none';
+    const cfConfig = await CloudflareSync.getConfig();
+    const canClose = !!(state.apiKey || CloudflareSync.isConfigured(cfConfig));
+    document.getElementById('btnCloseKeyModal').style.display = canClose ? 'flex' : 'none';
     if (localeSelect) localeSelect.value = getLocale();
     CloudflareSync.updateUI();
     keyModal.classList.add('active');
@@ -312,8 +314,10 @@ async function saveSettingsModal() {
     const cfToken = (document.getElementById('cfAuthTokenInput')?.value || '').trim();
     await CloudflareSync.setConfig(cfUrl, cfToken);
 
-    keyModal.classList.remove('active');
     const cfCfg = await CloudflareSync.getConfig();
+    if (state.apiKey || CloudflareSync.isConfigured(cfCfg)) {
+        keyModal.classList.remove('active');
+    }
     if (CloudflareSync.isConfigured(cfCfg)) {
         CloudflareSync.pushToCloud();
     }
@@ -1017,7 +1021,8 @@ GENERATE_BTN.onclick = async () => {
             const lk = safeLocalGet('gemini_api_key');
             if (lk) { apiKey = lk; await DB.setSetting('gemini_api_key', lk); safeLocalRemove('gemini_api_key'); }
         }
-        if (apiKey) state.apiKey = apiKey; else keyModal.classList.add('active');
+        if (apiKey) state.apiKey = apiKey;
+
         renderHistory();
         await loadLastSession();
         setPracticeMode('article');
@@ -1026,6 +1031,10 @@ GENERATE_BTN.onclick = async () => {
         viewShowExamConfig(setLearnRuntimeMode, switchTab);
 
         await CloudflareSync.initCloudSync();
+        const cfConfig = await CloudflareSync.getConfig();
+        if (!apiKey && !CloudflareSync.isConfigured(cfConfig)) {
+            keyModal.classList.add('active');
+        }
         initPostLocalePrompts();
     } catch (e) { logError('Init failed', e); keyModal.classList.add('active'); }
     finally {

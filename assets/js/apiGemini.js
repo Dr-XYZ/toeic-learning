@@ -4,6 +4,7 @@ import { state, TEXT_MODEL, TTS_MODEL } from './state.js';
 import { DB } from './db.js';
 import { getLocaleMeta } from './i18n.js';
 import { normalizeExamOutput } from './examNormalize.js';
+import { CloudflareSync } from './cloudflareSync.js';
 
 function ensureCandidateText(data) {
     if (data?.error) throw new Error(data.error.message || 'Gemini API error');
@@ -17,17 +18,39 @@ function parseJsonCandidateText(rawText) {
     return JSON.parse(cleaned);
 }
 
+async function callGemini(model, action, payload) {
+    if (state.apiKey) {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:${action}?key=${state.apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        return { ok: response.ok, status: response.status, data };
+    }
+
+    const cfConfig = await CloudflareSync.getConfig();
+    if (CloudflareSync.isConfigured(cfConfig)) {
+        const headers = await CloudflareSync.getHeaders(cfConfig);
+        const response = await fetch(`${cfConfig.url}/api/gemini`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ model, action, payload })
+        });
+        const data = await response.json();
+        return { ok: response.ok, status: response.status, data };
+    }
+
+    throw new Error('請先在設定 (⚙️) 中輸入 Gemini API Key 或填寫雲端邀請碼！');
+}
+
 async function fetchJsonFromPrompt(model, prompt) {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: "application/json" }
-        })
-    });
-    const data = await response.json();
-    return parseJsonCandidateText(ensureCandidateText(data));
+    const payload = {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+    };
+    const res = await callGemini(model, 'generateContent', payload);
+    return parseJsonCandidateText(ensureCandidateText(res.data));
 }
 
 export async function fetchGeminiText(score, customTopic) {
@@ -184,15 +207,19 @@ export async function fetchExamWrongAnswerExplanations(payload) {
 }
 
 export async function fetchGeminiTTS(text, voiceName) {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${state.apiKey}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } } } })
-    });
-    const data = await response.json();
-    if (!response.ok || data?.error) {
+    const payload = {
+        contents: [{ parts: [{ text }] }],
+        generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } }
+        }
+    };
+    const res = await callGemini(TTS_MODEL, 'generateContent', payload);
+    const data = res.data;
+    if (!res.ok || data?.error) {
         const message = data?.error?.message || 'TTS failed';
         const error = new Error(message);
-        error.code = data?.error?.code || response.status;
+        error.code = data?.error?.code || res.status;
         throw error;
     }
     return data.candidates[0].content.parts[0].inlineData.data;
