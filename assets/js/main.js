@@ -292,9 +292,8 @@ document.getElementById('btnSettings').onclick = async () => {
     document.getElementById('apiKeyInput').value = state.apiKey;
     const btnClearApiKey = document.getElementById('btnClearApiKey');
     if (btnClearApiKey) btnClearApiKey.classList.toggle('hidden', !state.apiKey);
-    const cfConfig = await CloudflareSync.getConfig();
-    const canClose = !!(state.apiKey || CloudflareSync.isConfigured(cfConfig));
-    document.getElementById('btnCloseKeyModal').style.display = canClose ? 'flex' : 'none';
+    const btnCloseKeyModal = document.getElementById('btnCloseKeyModal');
+    if (btnCloseKeyModal) btnCloseKeyModal.style.display = 'flex';
     if (localeSelect) localeSelect.value = getLocale();
     CloudflareSync.updateUI();
     keyModal.classList.add('active');
@@ -314,10 +313,9 @@ async function saveSettingsModal() {
     const cfToken = (document.getElementById('cfAuthTokenInput')?.value || '').trim();
     await CloudflareSync.setConfig(cfUrl, cfToken);
 
+    keyModal.classList.remove('active');
+
     const cfCfg = await CloudflareSync.getConfig();
-    if (state.apiKey || CloudflareSync.isConfigured(cfCfg)) {
-        keyModal.classList.remove('active');
-    }
     if (CloudflareSync.isConfigured(cfCfg)) {
         CloudflareSync.pushToCloud();
     }
@@ -609,8 +607,13 @@ if (btnClearApiKey) {
         }
         btnClearApiKey.classList.add('hidden');
     };
+if (keyModal) {
+    keyModal.addEventListener('click', (e) => {
+        if (e.target === keyModal) keyModal.classList.remove('active');
+    });
 }
-document.getElementById('btnCloseKeyModal').onclick = () => keyModal.classList.remove('active');
+const btnCloseKeyModal = document.getElementById('btnCloseKeyModal');
+if (btnCloseKeyModal) btnCloseKeyModal.onclick = () => keyModal.classList.remove('active');
 if (localeSelect) {
     localeSelect.onchange = async (event) => {
         const locale = setLocale(event.target.value);

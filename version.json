@@ -1,7 +1,7 @@
 {
-  "version": "1.5.8",
+  "version": "1.5.9",
   "date": "2026-08-08",
   "changes": [
-    "Fix AI availability checks so users authenticated with Cloud Invite Code do not get prompted for manual API Key"
+    "Fix unclickable UI freeze by ensuring settings modal overlay can always be dismissed by close button or backdrop click"
   ]
 }
