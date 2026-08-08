@@ -2,7 +2,7 @@
 
 [English](./README.en.md) | 中文
 
-> ℹ️ **專案修改申明**：本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor (brucefay110/toeic-learning)](https://github.com/brucefay110/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途之客製化修改（將備份機制升級為 Cloudflare Workers & KV 即時自動同步）。
+> ℹ️ **專案修改申明**：本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor (brucefay1115/toeic-learning)](https://github.com/brucefay1115/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途之客製化修改（將備份機制升級為 Cloudflare Workers & KV 即時自動同步）。
 
 > 零安裝、零月費、AI 驅動的多益學習神器。打開瀏覽器就能練，忙碌的你也能高效備考。
 
@@ -217,7 +217,7 @@ AI 生成文章後自動跳到「學習」頁面：
 
 PolyForm Noncommercial 1.0.0
 
-本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor](https://github.com/brucefay110/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途修改與使用。
+本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor](https://github.com/brucefay1115/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途修改與使用。
 
 您可以自由使用、修改與分享本專案於非商業用途；任何商業化使用（包含但不限於付費服務、商業產品整合、企業內部營利用途）需先取得原作者 Bruce Yang 的書面授權。
 
