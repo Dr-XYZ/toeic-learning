@@ -138,7 +138,7 @@ export default {
     "cloudRestoreBtn": "從雲端還原",
     "cloudLogoutBtn": "登出",
     "srsPhaseBadgeDefault": "英文 -> 中文",
-    "aboutBio": "TOEIC AI Tutor 原創開發者：Bruce Yang<br>本版本為個人客製化版本（基於 PolyForm Noncommercial 1.0.0 授權進行 Cloudflare 即時同步移轉）。<br>若本工具對您有幫助，歡迎請原作者喝杯咖啡支持！",
+    "aboutBio": "TOEIC AI Tutor 原創開發者：Bruce Yang<br>本版本為個人客製維護版本（基於 PolyForm Noncommercial 1.0.0 授權條款進行延伸修改）。<br>若本工具對您有幫助，歡迎請原作者喝杯咖啡支持！",
     "aboutFacebookDesc": "追蹤原作者動態",
     "aboutLinkedinDesc": "了解原作者專業背景",
     "aboutGithubDesc": "查看原專案開源程式碼 ⭐",

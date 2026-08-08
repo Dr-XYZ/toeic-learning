@@ -2,7 +2,7 @@
 
 [English](./README.en.md) | 中文
 
-> ℹ️ **專案修改申明**：本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor (brucefay1115/toeic-learning)](https://github.com/brucefay1115/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途之客製化修改（將備份機制升級為 Cloudflare Workers & KV 即時自動同步）。
+> ℹ️ **專案修改申明**：本專案衍生自 原作者 Bruce Yang 之 [TOEIC AI Tutor (brucefay1115/toeic-learning)](https://github.com/brucefay1115/toeic-learning)，遵循 **PolyForm Noncommercial 1.0.0** 授權條款進行個人非商業用途之客製化功能修訂與持續維護。
 
 > 零安裝、零月費、AI 驅動的多益學習神器。打開瀏覽器就能練，忙碌的你也能高效備考。
 

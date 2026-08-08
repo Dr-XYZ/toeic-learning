@@ -2,7 +2,7 @@
 
 English | [中文](./README.md)
 
-> ℹ️ **Project Disclaimer**: This repository is a modified personal edition derived from the original [TOEIC AI Tutor by Bruce Yang (brucefay1115/toeic-learning)](https://github.com/brucefay1115/toeic-learning) under the **PolyForm Noncommercial 1.0.0** license (upgraded cloud backup mechanism to real-time Cloudflare Workers & KV auto-sync).
+> ℹ️ **Project Disclaimer**: This repository is a modified personal edition derived from the original [TOEIC AI Tutor by Bruce Yang (brucefay1115/toeic-learning)](https://github.com/brucefay1115/toeic-learning) under the **PolyForm Noncommercial 1.0.0** license for personal non-commercial custom enhancements and maintenance.
 
 > Zero install, zero monthly fee, AI-powered TOEIC learning. Open your browser and start practicing anytime, anywhere.
 

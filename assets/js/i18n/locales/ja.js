@@ -146,7 +146,7 @@ export default {
     "cloudRestoreBtn": "クラウドから復元",
     "cloudLogoutBtn": "ログアウト",
     "srsPhaseBadgeDefault": "英語 -> 日本語",
-    "aboutBio": "TOEIC AI Tutor 原作者: Bruce Yang<br>このバージョンは PolyForm Noncommercial 1.0.0 ライセンスに基づく個人カスタマイズ版（Cloudflare 同期対応）です。",
+    "aboutBio": "TOEIC AI Tutor 原作者: Bruce Yang<br>このバージョンは PolyForm Noncommercial 1.0.0 ライセンスに基づく個人カスタマイズ版です。",
     "aboutFacebookDesc": "原作者をフォロー",
     "aboutLinkedinDesc": "原作者の経歴を見る",
     "aboutGithubDesc": "原作者のオープンソースコードを見る ⭐",
