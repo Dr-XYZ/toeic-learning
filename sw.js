@@ -1,7 +1,9 @@
 const CACHE_PREFIX = 'toeic-tutor-static';
-const CACHE_NAME = `${CACHE_PREFIX}-v6`;
+const CACHE_NAME = `${CACHE_PREFIX}-v7`;
 
 const STATIC_ASSETS = [
+  './',
+  './index.html',
   './manifest.json',
   './assets/css/styles.css',
   './assets/js/main.js',
@@ -38,6 +40,7 @@ const STATIC_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.delete(CACHE_NAME)
       .then(() => caches.open(CACHE_NAME))
@@ -92,7 +95,12 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           return response;
         })
-        .catch(() => caches.match(event.request))
+        .catch(async () => {
+          const cache = await caches.open(CACHE_NAME);
+          const matched = await cache.match(event.request);
+          if (matched) return matched;
+          return (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
+        })
     );
     return;
   }

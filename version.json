@@ -1,7 +1,7 @@
 {
-  "version": "1.5.1",
+  "version": "1.5.2",
   "date": "2026-08-08",
   "changes": [
-    "Fix HTML script tag syntax in index.html to resolve bootstrap loading issue"
+    "Upgrade Service Worker PWA cache handling and skipWaiting for iOS WebKit standalone mode"
   ]
 }
