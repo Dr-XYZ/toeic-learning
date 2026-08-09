@@ -208,13 +208,16 @@ export const CloudflareSync = {
                 : t('cloudNotSynced');
         }
 
+        const aboutCloudStatusEl = document.getElementById('aboutCloudStatus');
         if (this.isConfigured(cfg)) {
+            if (aboutCloudStatusEl) aboutCloudStatusEl.textContent = t('aboutCloudStatusActive');
             if (lastSync) {
                 this.setSyncStatus('synced', t('cloudSyncSyncedAt', { time: lastSync }));
             } else {
                 this.setSyncStatus('synced', t('cloudSyncReady'));
             }
         } else {
+            if (aboutCloudStatusEl) aboutCloudStatusEl.textContent = t('aboutCloudStatusOffline');
             this.setSyncStatus('unconfigured', t('cloudSyncUnconfigured'));
         }
     },

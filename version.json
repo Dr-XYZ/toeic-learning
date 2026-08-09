@@ -1,7 +1,7 @@
 {
-  "version": "1.6.0",
-  "date": "2026-08-08",
+  "version": "1.6.1",
+  "date": "2026-08-09",
   "changes": [
-    "Fix critical JavaScript syntax error in main.js to restore full app clickability and interactive event bindings"
+    "Update About page (#tabAbout) to feature system architecture, status indicator, and project repository details while removing personal social links"
   ]
 }
